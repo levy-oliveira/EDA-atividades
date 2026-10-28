@@ -1,0 +1,19 @@
+# binarios e objetos
+programa
+programa_debug
+programa.exe
+obj/
+build/
+out/
+*.o
+*.d
+*.obj
+*.exe
+*.pdb
+*.ilk
+
+# IDEs e ferramentas
+.vs/
+.cache/
+compile_commands.json
+CMakeUserPresets.json
