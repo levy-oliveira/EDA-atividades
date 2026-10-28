@@ -4,6 +4,8 @@
 #include <sstream>
 #include <string>
 
+#include "lista_ordenada.hpp"
+
 int main(int argc, char** argv) {
     if (argc < 2) {
         std::cerr << "uso: " << argv[0] << " arquivo_de_entrada\n";
@@ -15,6 +17,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    ListaOrdenada lista;
     std::string linha;
     while (std::getline(entrada, linha)) {
         // tolera entrada com fim de linha do Windows (CRLF)
@@ -26,22 +29,24 @@ int main(int argc, char** argv) {
 
         if (cmd == "INC") {
             int n;
-            ss >> n;
-            // TODO: incluir n e criar nova versao
+            if (ss >> n) lista.incluir(n);
         } else if (cmd == "REM") {
             int n;
-            ss >> n;
-            // TODO: remover n (se existir) e criar nova versao
+            if (ss >> n) lista.remover(n);
         } else if (cmd == "SUC") {
             int n, m;
-            ss >> n >> m;
-            std::cout << linha << "\n";
-            // TODO: imprimir o sucessor de n na versao m
+            if (ss >> n >> m) {
+                std::cout << linha << "\n";
+                const auto s = lista.sucessor(n, m);
+                if (s) std::cout << *s << "\n";
+                else std::cout << "inf\n";
+            }
         } else if (cmd == "IMP") {
             int m;
-            ss >> m;
-            std::cout << linha << "\n";
-            // TODO: imprimir a estrutura na versao m
+            if (ss >> m) {
+                std::cout << linha << "\n";
+                std::cout << lista.imprimir(m) << "\n";
+            }
         }
     }
     return 0;
