@@ -4,7 +4,7 @@
 #include <sstream>
 #include <string>
 
-#include "lista_ordenada.hpp"
+#include "../include/lista_ordenada.h"
 
 int main(int argc, char** argv) {
     if (argc < 2) {

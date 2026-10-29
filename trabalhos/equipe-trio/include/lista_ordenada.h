@@ -5,14 +5,14 @@
 #include <string>
 #include <vector>
 
-#include "persistencia.hpp"
+#include "persistencia.h"
 
 class ListaOrdenada {
 public:
     ListaOrdenada();  // versao 0: lista vazia
 
     int versao_atual() const;                    // ultimo id de versao (0 = vazia)
-    std::size_t total_nos() const { return mec_.total_nos(); }
+    std::size_t total_nos() const;
 
     void incluir(int chave);                     // INC: cria uma versao
     void remover(int chave);                     // REM: cria uma versao (mesmo se nao achar)

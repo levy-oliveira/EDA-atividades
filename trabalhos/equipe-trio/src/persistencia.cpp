@@ -1,7 +1,16 @@
 // persistencia.cpp - implementacao de LER e ESCREVER (ver persistencia.hpp).
-#include "persistencia.hpp"
+#include "../include/persistencia.h"
 
 #include <cassert>
+#include <cstddef>
+
+No* Persistencia::raiz() const {
+    return raiz_;
+}
+
+std::size_t Persistencia::total_nos() const {
+    return pool_.size();
+}
 
 Persistencia::Persistencia() : raiz_(nullptr) {
     raiz_ = criar_no(-1);  // sentinela: chave -1 nunca colide com chaves >= 0

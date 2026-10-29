@@ -1,13 +1,13 @@
-// persistencia.hpp - mecanismo de persistencia parcial (copia de nos).
+// persistencia.h - mecanismo de persistencia parcial (copia de nos).
 //
 // Esta classe NAO sabe nada sobre listas ordenadas: so sabe ler e escrever o
-// campo `next` de um no em uma versao. A lista ordenada e construida por cima.
+// campo `next` de um no em uma versao. A lista ordenada é construida por cima.
 #pragma once
 
 #include <cstddef>
 #include <deque>
 
-#include "no.hpp"
+#include "no.h"
 
 class Persistencia {
 public:
@@ -17,10 +17,10 @@ public:
     Persistencia& operator=(const Persistencia&) = delete;
 
     // Raiz (sentinela) da ULTIMA versao. Muda quando a raiz e copiada.
-    No* raiz() const { return raiz_; }
+    No* raiz() const;
 
     // Total de nos alocados (inclui as copias): usado para conferir o espaco O(v).
-    std::size_t total_nos() const { return pool_.size(); }
+    std::size_t total_nos() const;
 
     // Aloca um no novo (next = nullptr, sem mods). Os enderecos sao estaveis.
     No* criar_no(int chave);

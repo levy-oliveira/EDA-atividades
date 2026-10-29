@@ -1,6 +1,7 @@
 // lista_ordenada.cpp - o algoritmo da lista ordenada, escrito como na versao
 // efemera, mas lendo com Persistencia::ler e escrevendo com Persistencia::escrever.
-#include "lista_ordenada.hpp"
+#include "../include/lista_ordenada.h"
+#include <cstddef>
 
 ListaOrdenada::ListaOrdenada() {
     raizes_.push_back(mec_.raiz());
@@ -8,6 +9,10 @@ ListaOrdenada::ListaOrdenada() {
 
 int ListaOrdenada::versao_atual() const {
     return static_cast<int>(raizes_.size()) - 1;
+}
+
+std::size_t ListaOrdenada::total_nos() const {
+    return mec_.total_nos();
 }
 
 int ListaOrdenada::normalizar(int versao) const {
