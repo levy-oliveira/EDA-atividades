@@ -8,8 +8,8 @@ No* Persistencia::raiz() const {
     return raiz_;
 }
 
-std::size_t Persistencia::total_nos() const {
-    return pool_.size();
+int Persistencia::total_nos() const {
+    return (int)pool_.size();
 }
 
 Persistencia::Persistencia() : raiz_(nullptr) {
@@ -17,8 +17,9 @@ Persistencia::Persistencia() : raiz_(nullptr) {
 }
 
 No* Persistencia::criar_no(int chave) {
-    pool_.push_back(No{chave, nullptr, nullptr, 0, {}});
-    return &pool_.back();
+    No* novo = new No{chave, nullptr, nullptr, 0, {}};
+    pool_.push_back(novo);
+    return novo;
 }
 
 No* Persistencia::proximo_atual(const No* n) {
@@ -52,7 +53,7 @@ void Persistencia::escrever(No* n, No* novo, int versao) {
         antigo->retorno = nullptr;
     }
 
-    if (n->nmods < kMaxMods) {
+    if (n->nmods < MAX_MODS) {
         // Caso 1: ha espaco nos mods. Basta anotar (versao, novo valor).
         n->mods[n->nmods++] = Mod{versao, novo};
         if (novo != nullptr) novo->retorno = n;

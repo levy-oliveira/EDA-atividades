@@ -1,7 +1,6 @@
 <#
-  Roda os testes (.in/.out) no Windows comparando a saida exatamente.
-  Os fins de linha CRLF e LF sao normalizados antes da comparacao
-  (o Windows grava CRLF; o Linux, onde o trabalho e corrigido, grava LF).
+  Compila (se necessario) e roda os testes (.in/.out) no Windows.
+  Os fins de linha CRLF e LF sao normalizados antes da comparacao.
 
   Uso, a partir de trabalhos\equipe-trio:
     .\scripts\run_tests.ps1
@@ -13,12 +12,23 @@ param(
 )
 
 $root = Split-Path -Parent $PSScriptRoot
+$buildDir = Join-Path $root "build"
 
+# --- Compilar (apenas quando -Exe nao for fornecido explicitamente) ---
 if (-not $Exe) {
-    $found = Get-ChildItem -Path $root -Recurse -Filter programa.exe -ErrorAction SilentlyContinue |
+    if (-not (Test-Path $buildDir)) {
+        Write-Host "Configurando CMake..."
+        cmake -S $root -B $buildDir
+        if ($LASTEXITCODE -ne 0) { Write-Host "Falha na configuracao do CMake."; exit 1 }
+    }
+    Write-Host "Compilando..."
+    cmake --build $buildDir
+    if ($LASTEXITCODE -ne 0) { Write-Host "Falha na compilacao."; exit 1 }
+
+    $found = Get-ChildItem -Path $buildDir -Recurse -Filter programa.exe -ErrorAction SilentlyContinue |
         Sort-Object LastWriteTime -Descending | Select-Object -First 1
     if (-not $found) {
-        Write-Host "programa.exe nao encontrado. Compile antes ou use -Exe."
+        Write-Host "programa.exe nao encontrado apos compilacao."
         exit 2
     }
     $Exe = $found.FullName

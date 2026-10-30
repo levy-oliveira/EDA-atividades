@@ -1,26 +1,22 @@
-// no.hpp - o no da lista persistente (modelo "maquina de ponteiros").
+// no.h - o no da lista persistente (modelo "maquina de ponteiros").
 #pragma once
 
-// Hipotese do teorema de persistencia parcial: no maximo p ponteiros apontam
-// para cada no. Numa lista encadeada simples so o no anterior aponta para ele.
-constexpr int kP = 1;
-
-// Cada no guarda ate 2p modificacoes antes de precisar ser copiado.
-constexpr int kMaxMods = 2 * kP;
+// Numa lista encadeada simples, cada no tem no maximo 1 ponteiro apontando
+// para ele. Por isso, cada no guarda ate 2 modificacoes antes de ser copiado.
+const int MAX_MODS = 2;
 
 struct No;
 
-// Uma modificacao do campo `next`: "a partir da versao `versao`, next = valor".
-// (Com mais de um campo ponteiro, seria preciso guardar tambem qual campo.)
+// Uma modificacao do campo `next`: "na versao `versao`, next passou a ser `valor`".
 struct Mod {
     int versao;
     No* valor;
 };
 
 struct No {
-    int chave;        // imutavel: nunca e reescrita
-    No* next;         // valor ORIGINAL do campo next (vale ate a primeira mod)
-    No* retorno;      // quem aponta para este no na ULTIMA versao (no maximo p = 1)
-    int nmods;        // quantas posicoes de mods estao em uso
-    Mod mods[kMaxMods];  // em ordem crescente de versao
+    int chave;            // nunca e alterado apos a criacao do no
+    No* next;             // valor original de next (vale ate a primeira mod)
+    No* retorno;          // quem aponta para este no na versao mais recente
+    int nmods;            // quantas entradas de mods estao em uso
+    Mod mods[MAX_MODS];   // historico de modificacoes, em ordem crescente de versao
 };

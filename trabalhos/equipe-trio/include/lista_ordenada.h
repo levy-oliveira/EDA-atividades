@@ -1,7 +1,6 @@
-// lista_ordenada.hpp - lista encadeada ordenada com persistencia parcial.
+// lista_ordenada.h - lista encadeada ordenada com persistencia parcial.
 #pragma once
 
-#include <optional>
 #include <string>
 #include <vector>
 
@@ -11,14 +10,15 @@ class ListaOrdenada {
 public:
     ListaOrdenada();  // versao 0: lista vazia
 
-    int versao_atual() const;                    // ultimo id de versao (0 = vazia)
-    std::size_t total_nos() const;
+    int versao_atual() const;   // ultimo id de versao (0 = vazia)
+    int total_nos() const;
 
-    void incluir(int chave);                     // INC: cria uma versao
-    void remover(int chave);                     // REM: cria uma versao (mesmo se nao achar)
+    void incluir(int chave);    // INC: cria uma versao
+    void remover(int chave);    // REM: cria uma versao (mesmo se nao achar)
 
     // SUC: menor chave estritamente maior que `chave` na versao `versao`.
-    std::optional<int> sucessor(int chave, int versao) const;
+    // Retorna -1 se nao existir tal chave.
+    int sucessor(int chave, int versao) const;
 
     // IMP: elementos da versao `versao` em ordem crescente, separados por ", ".
     std::string imprimir(int versao) const;

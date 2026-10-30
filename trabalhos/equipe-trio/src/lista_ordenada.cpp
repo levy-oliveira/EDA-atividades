@@ -1,17 +1,16 @@
 // lista_ordenada.cpp - o algoritmo da lista ordenada, escrito como na versao
 // efemera, mas lendo com Persistencia::ler e escrevendo com Persistencia::escrever.
 #include "../include/lista_ordenada.h"
-#include <cstddef>
 
 ListaOrdenada::ListaOrdenada() {
     raizes_.push_back(mec_.raiz());
 }
 
 int ListaOrdenada::versao_atual() const {
-    return static_cast<int>(raizes_.size()) - 1;
+    return (int)raizes_.size() - 1;
 }
 
-std::size_t ListaOrdenada::total_nos() const {
+int ListaOrdenada::total_nos() const {
     return mec_.total_nos();
 }
 
@@ -60,13 +59,13 @@ void ListaOrdenada::remover(int chave) {
     raizes_.push_back(mec_.raiz());
 }
 
-std::optional<int> ListaOrdenada::sucessor(int chave, int versao) const {
+int ListaOrdenada::sucessor(int chave, int versao) const {
     const int v = normalizar(versao);
-    // A lista e ordenada: o primeiro nome > chave e o sucessor.
+    // A lista e ordenada: o primeiro no com chave > `chave` e o sucessor.
     for (const No* n = Persistencia::ler(raizes_[v], v); n != nullptr; n = Persistencia::ler(n, v)) {
         if (n->chave > chave) return n->chave;
     }
-    return std::nullopt;
+    return -1;  // nao encontrado
 }
 
 std::string ListaOrdenada::imprimir(int versao) const {

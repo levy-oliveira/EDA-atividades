@@ -37,8 +37,8 @@ int main(int argc, char** argv) {
             int n, m;
             if (ss >> n >> m) {
                 std::cout << linha << "\n";
-                const auto s = lista.sucessor(n, m);
-                if (s) std::cout << *s << "\n";
+                int s = lista.sucessor(n, m);
+                if (s >= 0) std::cout << s << "\n";
                 else std::cout << "inf\n";
             }
         } else if (cmd == "IMP") {
