@@ -1,0 +1,6 @@
+# Todo arquivo de texto fica com LF no disco, inclusive no Windows.
+# Sem isso o Git for Windows grava CRLF e um zip da pasta leva um Makefile
+# que o make do Linux nao consegue ler.
+* text=auto eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
