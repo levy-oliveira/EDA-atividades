@@ -2,40 +2,40 @@
 
 ## Equipe
 
-Fulano (matrícula 123456) e Cicrano (matrícula 654321)
+Luiz Gustavo (matrícula 537585), Levy Oliveira (matrícula 541800) e Anna Beatriz (matrícula 415152)
 
 ## Descrição
 
 - **Linguagem de programação utilizada:** C++17
 - **Estruturas:**
-  - **`Mod`** — definida em `include/no.h`
-    - Registra uma modificação do campo `next` de um nó
-    - `versao`: versão em que a modificação ocorreu
-    - `valor`: novo valor de `next` a partir dessa versão
+  - **`Mod`** — definida em `include/node.h`
+    - Registra uma modificação do campo `next`
+    - `version`: versão em que a modificação ocorreu
+    - `value`: novo valor de `next` a partir dessa versão
 
-  - **`No`** — definida em `include/no.h`
+  - **`Node`** — definida em `include/node.h`
     - Nó da lista encadeada persistente
-    - `chave`: valor inteiro armazenado (nunca alterado após a criação)
+    - `key`: valor inteiro armazenado (nunca alterado após a criação)
     - `next`: valor original do ponteiro para o próximo nó
-    - `retorno`: ponteiro para o nó que aponta para este na versão mais recente (permite propagar cópias)
-    - `nmods`: quantidade de modificações registradas em `mods`
+    - `back`: ponteiro para o nó que aponta para este na versão mais recente (permite propagar cópias)
+    - `mod_count`: quantidade de modificações registradas em `mods`
     - `mods[MAX_MODS]`: histórico de até 2 modificações do campo `next`, em ordem crescente de versão
 
-  - **`Persistencia`** — definida em `include/persistencia.h`, implementada em `src/persistencia.cpp`
-    - Implementa o mecanismo de persistência parcial pelo método da máquina de ponteiros
-    - Não conhece a lógica de lista ordenada: apenas lê e escreve o campo `next` de um nó em uma versão
-    - `criar_no(chave)`: aloca um novo nó com `new` e o registra no pool
-    - `ler(n, versao)`: retorna o valor de `n->next` na versão `versao`, consultando o histórico de modificações
-    - `inicializar_next(n, alvo)`: define o `next` original de um nó recém-criado sem registrar modificação
-    - `escrever(n, novo, versao)`: faz `n->next = novo` na versão `versao`; se o nó já tiver `MAX_MODS` modificações, cria uma cópia e propaga a escrita recursivamente pelos ponteiros de retorno
-    - `raiz()`: retorna o nó sentinela da versão mais recente
-    - `total_nos()`: retorna o total de nós alocados, incluindo cópias
+  - **`Persistence`** — definida em `include/persistence.h`, implementada em `src/persistence.cpp`
+    - Implementa a persistência parcial pelo método da cópia de nós (máquina de ponteiros)
+    - Não conhece a lógica da lista ordenada: apenas lê e escreve o campo `next` de um nó em uma versão
+    - `create_node(key)`: aloca um novo nó e o registra no pool (liberado pelo destrutor)
+    - `read(n, version)`: retorna o valor de `n->next` na versão `version`
+    - `init_next(n, target)`: define o `next` original de um nó recém-criado sem registrar modificação
+    - `write(n, value, version)`: faz `n->next = value` na versão `version`; se o nó já tiver `MAX_MODS` modificações, cria uma cópia e propaga a escrita recursivamente pelos ponteiros `back`
+    - `root()`: retorna o nó sentinela da versão mais recente
+    - `node_count()`: retorna o total de nós alocados, incluindo cópias
 
-  - **`ListaOrdenada`** — definida em `include/lista_ordenada.h`, implementada em `src/lista_ordenada.cpp`
-    - Lista encadeada ordenada com persistência parcial, construída sobre `Persistencia`
-    - `incluir(chave)`: insere `chave` na posição correta e cria uma nova versão
-    - `remover(chave)`: remove a primeira ocorrência de `chave` e cria uma nova versão (mesmo se não encontrar)
-    - `sucessor(chave, versao)`: retorna o menor valor estritamente maior que `chave` na versão `versao`, ou `-1` se não existir
-    - `imprimir(versao)`: retorna os elementos da versão `versao` em ordem crescente, separados por `", "`
-    - `versao_atual()`: retorna o índice da versão mais recente
-    - `normalizar(versao)`: converte uma versão inexistente na versão mais recente
+  - **`SortedList`** — definida em `include/sorted_list.h`, implementada em `src/sorted_list.cpp`
+    - Lista encadeada ordenada com persistência parcial, construída sobre `Persistence`
+    - `insert(key)`: insere `key` na posição correta e cria uma nova versão
+    - `remove(key)`: remove uma ocorrência de `key` e cria uma nova versão (mesmo se não encontrar)
+    - `successor(key, version)`: retorna o menor valor estritamente maior que `key` na versão `version`, ou `-1` se não existir
+    - `print(version)`: retorna os elementos da versão `version` em ordem crescente, separados por `", "`
+    - `current_version()`: retorna o índice da versão mais recente
+    - `normalize(version)`: converte uma versão inexistente na versão mais recente

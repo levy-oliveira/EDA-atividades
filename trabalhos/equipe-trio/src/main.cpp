@@ -1,52 +1,47 @@
-// main.cpp - le o arquivo de entrada e despacha os comandos.
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string>
 
-#include "../include/lista_ordenada.h"
+#include "../include/sorted_list.h"
 
 int main(int argc, char** argv) {
     if (argc < 2) {
-        std::cerr << "uso: " << argv[0] << " arquivo_de_entrada\n";
+        std::cerr << "usage: " << argv[0] << " input_file\n";
         return 1;
     }
-    std::ifstream entrada(argv[1]);
-    if (!entrada) {
-        std::cerr << "nao foi possivel abrir " << argv[1] << "\n";
+    std::ifstream input(argv[1]);
+    if (!input) {
+        std::cerr << "could not open " << argv[1] << "\n";
         return 1;
     }
 
-    ListaOrdenada lista;
-    std::string linha;
-    while (std::getline(entrada, linha)) {
-        // tolera entrada com fim de linha do Windows (CRLF)
-        if (!linha.empty() && linha.back() == '\r') linha.pop_back();
+    SortedList list;
+    std::string line;
+    while (std::getline(input, line)) {
+        if (!line.empty() && line.back() == '\r') line.pop_back();
 
-        std::istringstream ss(linha);
+        std::istringstream ss(line);
         std::string cmd;
         ss >> cmd;
 
         if (cmd == "INC") {
             int n;
-            if (ss >> n) lista.incluir(n);
+            if (ss >> n) list.insert(n);
         } else if (cmd == "REM") {
             int n;
-            if (ss >> n) lista.remover(n);
+            if (ss >> n) list.remove(n);
         } else if (cmd == "SUC") {
             int n, m;
             if (ss >> n >> m) {
-                std::cout << linha << "\n";
-                int s = lista.sucessor(n, m);
+                int s = list.successor(n, m);
+                std::cout << line << "\n";
                 if (s >= 0) std::cout << s << "\n";
                 else std::cout << "inf\n";
             }
         } else if (cmd == "IMP") {
             int m;
-            if (ss >> m) {
-                std::cout << linha << "\n";
-                std::cout << lista.imprimir(m) << "\n";
-            }
+            if (ss >> m) std::cout << line << "\n" << list.print(m) << "\n";
         }
     }
     return 0;

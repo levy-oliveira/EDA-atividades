@@ -1,6 +1,5 @@
-# Uso local (Visual Studio / VS Code). A entrega usa o Makefile.
 cmake_minimum_required(VERSION 3.20)
-project(persistencia LANGUAGES CXX)
+project(persistenceLANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
